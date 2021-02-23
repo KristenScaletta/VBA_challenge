@@ -1,0 +1,41 @@
+Sub stockdata()
+'Select year
+Dim fulldate As String
+Dim year() As String
+
+'fulldate = Cells(2, 2)
+'year = Split(fulldate, "0")
+'Cells(2, 8) = year(1)
+
+
+'Output ticker symbol
+Dim ticker As String
+Dim i As Long
+
+'Source for empty code: https://stackoverflow.com/questions/10811121/detect-if-range-is-empty
+If IsEmpty(Range("A:A")) = False Then
+    For i = 2 To 80000
+        ticker = Cells(i, 1)
+        Cells(i, 11) = ticker
+    Next i
+End If
+
+'Output yearly change (sort by date and subtract ending date from beginning date)
+Dim openrate As Double
+Dim closerate As Double
+
+openrate = Cells(2, 2).Value
+
+
+
+'The percent change from opening price at the beginning of a given year to the closing price at the end of that year.
+
+'The total stock volume of the stock.
+
+
+
+
+'You should also have conditional formatting that will highlight positive change in green and negative change in red.
+
+
+End Sub
