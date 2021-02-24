@@ -1,65 +1,71 @@
 Sub newsummarysheet()
-'Add a new sheet with summary header information at the beginning of the workbook (source: https://www.automateexcel.com/vba/add-and-name-worksheets)
-Sheets.Add(Before:=Sheets("A")).Name = "Summary"
-Cells(1, 1).Value = "Ticker"
-Cells(1, 2).Value = "Yearly Change"
-Cells(1, 3).Value = "Percent Change"
-Cells(1, 4).Value = "Total Stock Volume"
-
-'Format cells in header row (row 1 through column J in case I wanted extra columns) as bold. (Source: https://docs.microsoft.com/en-us/office/vba/api/excel.font.bold)
-Worksheets("Summary").Range("A1:J1").Font.Bold = True
+    'Add a new sheet with summary header information at the beginning of the workbook (source: https://www.automateexcel.com/vba/add-and-name-worksheets)
+    Sheets.Add(Before:=Sheets("A")).Name = "Summary"
+    Cells(1, 1).Value = "Ticker"
+    Cells(1, 2).Value = "Yearly Change"
+    Cells(1, 3).Value = "Percent Change"
+    Cells(1, 4).Value = "Total Stock Volume"
+    
+    'Format cells in header row (row 1 through column J in case I wanted extra columns) as bold. (Source: https://docs.microsoft.com/en-us/office/vba/api/excel.font.bold)
+    Worksheets("Summary").Range("A1:J1").Font.Bold = True
 
 End Sub
 Sub stockdata()
-'Decalre variables
-Dim lastrow As Long
-Dim lastcolumn As Long
-Dim row As Long
-Dim col As Long
-Dim summaryrow As Integer
-Dim ticker As String
-Dim rowplace As Long
-Dim openrate As Double
-Dim voltotal As Double
+   'Question--do you indent under the sub as well or just loops/if statements?
+    'Decalre variables
+    Dim lastrow As Long
+    Dim lastcolumn As Long
+    Dim row As Long
+    Dim col As Long
+    Dim summaryrow As Integer
+    Dim ticker As String
+    Dim rowplace As Long
+    Dim openrate As Double
+    Dim voltotal As Double
+    Dim percentchange As Double
 
+    'Set last row and column (though column isn't needed here--just for my reference). Used code Eli demonstrated in class as source.
+    lastrow = Cells(Rows.Count, 1).End(xlUp).row
+    lastcolumn = Cells(1, Columns.Count).End(xlToLeft).Column
+    
+    'Set the value of rowplace for the summary sheet.
+    rowplace = 2
+    
+    'Hold initial open and close rates (close is probably not needed--just to be safe
+    openrate = Cells(2, 3).Value
+    closerate = Cells(2, 6).Value
 
-lastrow = Cells(Rows.Count, 1).End(xlUp).row
-lastcolumn = Cells(1, Columns.Count).End(xlToLeft).Column
+    For row = 2 To lastrow
 
-rowplace = 2
-'Hold initial open and close rates
-openrate = Cells(2, 3).Value
-Cells(2, 9) = openrate
-
-closerate = Cells(2, 6).Value
-Cells(2, 10) = closerate
-
-
-  
-For row = 2 To lastrow
-
-'Calculates running total stock volume per stock
+    'Calculates running total stock volume per stock
     voltotal = Cells(row, 7) + voltotal
 
-If Cells(row + 1, 1).Value <> Cells(row, 1).Value Then
+        If Cells(row + 1, 1).Value <> Cells(row, 1).Value Then
+                    
+           ' put the ticker symbol in the ticker column on the summary page
+            ticker = Cells(row, 1).Value
+            Worksheets("Summary").Cells(rowplace, 1).Value = ticker
+                    
+           'Add yearly change and percent change to summary page. Note--I calculated percent change by dividing open by closerate for each ticker and multiplying by 100 (via the cell formatting). Not sure if that was the right formula.
+            closerate = Cells(row, 6).Value
+            percentchange = (openrate - closerate) / closerate
+            Worksheets("Summary").Cells(rowplace, 2).Value = openrate - closerate
+            Worksheets("Summary").Cells(rowplace, 3).Value = percentchange
+            'Source for percentage format:https://www.teachexcel.com/free-excel-macros/m-72,Format-Cells-as-a-Percentage-in-Excel-Number-Formatting.html
+            Worksheets("Summary").Cells(rowplace, 3).NumberFormat = "0.00%"
+            openrate = Cells(row + 1, 3).Value
             
-   ' put the ticker symbol in the ticker column on the summary page
-    ticker = Cells(row, 1).Value
-    Worksheets("Summary").Cells(rowplace, 1).Value = ticker
+        
+         
+            'Add total volume to summary page and reset
+            Worksheets("Summary").Cells(rowplace, 4).Value = voltotal
             
-   'Add yearly change to summary page
-    closerate = Cells(row, 6).Value
-    Worksheets("Summary").Cells(rowplace, 2).Value = openrate - closerate
-    openrate = Cells(row + 1, 3).Value
- 
-    'Add total volume to summary page and reset
-    Worksheets("Summary").Cells(rowplace, 4).Value = voltotal
-    
-    voltotal = 0
-    
+            voltotal = 0
+            percentchange = 0
             
-    rowplace = rowplace + 1
-       
+                    
+            rowplace = rowplace + 1
+           
         End If
     Next row
     
@@ -67,28 +73,18 @@ If Cells(row + 1, 1).Value <> Cells(row, 1).Value Then
 End Sub
 
 Sub Cellcolor()
-Dim row As Long
-Dim lastrow As Long
-
-lastrow = Cells(Rows.Count, 1).End(xlUp).row
-
-'Sets color of cells in yearly change summary column to be red if negative and green if not
-For row = 2 To lastrow
-    If Worksheets("Summary").Cells(row, 2).Value > 0 Then
-        Worksheets("Summary").Cells(row, 2).Interior.ColorIndex = 4
-    Else
-        Worksheets("Summary").Cells(row, 2).Interior.ColorIndex = 3
-    End If
-Next row
-
-
-
-
-
-'The percent change from opening price at the beginning of a given year to the closing price at the end of that year.
-
-
-
-
-
+    Dim row As Long
+    Dim lastrow As Long
+    
+    lastrow = Cells(Rows.Count, 1).End(xlUp).row
+    
+    'Sets color of cells in yearly change summary column to be red if negative and green if not
+    For row = 2 To lastrow
+        If Worksheets("Summary").Cells(row, 2).Value > 0 Then
+            Worksheets("Summary").Cells(row, 2).Interior.ColorIndex = 4
+        Else
+            Worksheets("Summary").Cells(row, 2).Interior.ColorIndex = 3
+        End If
+    Next row
+    
 End Sub
