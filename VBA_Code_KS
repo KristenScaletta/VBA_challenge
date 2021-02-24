@@ -21,6 +21,7 @@ Sub stockdata()
     Dim ticker As String
     Dim rowplace As Long
     Dim openrate As Double
+    Dim closerate As Double
     Dim voltotal As Double
     Dim percentchange As Double
 
@@ -33,7 +34,7 @@ Sub stockdata()
     
     'Hold initial open and close rates (close is probably not needed--just to be safe
     openrate = Cells(2, 3).Value
-    closerate = Cells(2, 6).Value
+    'closerate = Cells(2, 6).Value
 
     For row = 2 To lastrow
 
@@ -46,10 +47,10 @@ Sub stockdata()
             ticker = Cells(row, 1).Value
             Worksheets("Summary").Cells(rowplace, 1).Value = ticker
                     
-           'Add yearly change and percent change to summary page. Note--I calculated percent change by dividing open by closerate for each ticker and multiplying by 100 (via the cell formatting). Not sure if that was the right formula.
+           'Add yearly change and percent change to summary page.
             closerate = Cells(row, 6).Value
-            percentchange = (openrate - closerate) / closerate
-            Worksheets("Summary").Cells(rowplace, 2).Value = openrate - closerate
+            percentchange = (closerate - openrate) / closerate
+            Worksheets("Summary").Cells(rowplace, 2).Value = closerate - openrate
             Worksheets("Summary").Cells(rowplace, 3).Value = percentchange
             'Source for percentage format:https://www.teachexcel.com/free-excel-macros/m-72,Format-Cells-as-a-Percentage-in-Excel-Number-Formatting.html
             Worksheets("Summary").Cells(rowplace, 3).NumberFormat = "0.00%"
@@ -88,3 +89,4 @@ Sub Cellcolor()
     Next row
     
 End Sub
+
