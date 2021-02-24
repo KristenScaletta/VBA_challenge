@@ -47,8 +47,9 @@ Sub stockdata()
             ticker = Cells(row, 1).Value
             Worksheets("Summary").Cells(rowplace, 1).Value = ticker
                     
-           'Add yearly change and percent change to summary page.
+           'Add yearly change and percent change to summary page. Note--percent change isn't working and I'm not sure why. Assistance is apprecaited!
             closerate = Cells(row, 6).Value
+
             percentchange = (closerate - openrate) / closerate
             Worksheets("Summary").Cells(rowplace, 2).Value = closerate - openrate
             Worksheets("Summary").Cells(rowplace, 3).Value = percentchange
@@ -56,7 +57,7 @@ Sub stockdata()
             Worksheets("Summary").Cells(rowplace, 3).NumberFormat = "0.00%"
             openrate = Cells(row + 1, 3).Value
             
-        
+
          
             'Add total volume to summary page and reset
             Worksheets("Summary").Cells(rowplace, 4).Value = voltotal
