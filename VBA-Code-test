@@ -1,30 +1,64 @@
+Sub newsummarysheet()
+'Add a new sheet with summary header information at the beginning of the workbook (source: https://www.automateexcel.com/vba/add-and-name-worksheets)
+Sheets.Add(Before:=Sheets("A")).Name = "Summary"
+Cells(1, 1).Value = "Ticker"
+Cells(1, 2).Value = "Yearly Change"
+Cells(1, 3).Value = "Percent Change"
+Cells(1, 4).Value = "Total Stock Volume"
+
+'Format cells in header row (row 1 through column J in case I wanted extra columns) as bold. (Source: https://docs.microsoft.com/en-us/office/vba/api/excel.font.bold)
+Worksheets("Summary").Range("A1:J1").Font.Bold = True
+
+End Sub
 Sub stockdata()
 'Select year
 Dim fulldate As String
 Dim year() As String
+Dim lastrow As Long
+Dim lastcolumn As Long
+Dim row As Long
+Dim col As Long
+Dim summaryrow As Integer
+Dim ticker As String
+Dim rowplace As Long
 
 'fulldate = Cells(2, 2)
 'year = Split(fulldate, "0")
 'Cells(2, 8) = year(1)
 
+lastrow = Cells(Rows.Count, 1).End(xlUp).row
+lastcolumn = Cells(1, Columns.Count).End(xlToLeft).Column
+
+rowplace = 2
+For row = 2 To lastrow
+
+If Cells(row + 1, 1).Value <> Cells(row, 1).Value Then
+            
+            ' put the ticker symbol in the ticker column on the summary page
+            ticker = Cells(row, 1).Value
+            Worksheets("Summary").Cells(rowplace, 1).Value = ticker
+            rowplace = rowplace + 1
+       
+        End If
+    Next row
 
 'Output ticker symbol
-Dim ticker As String
-Dim i As Long
+'Dim ticker As String
+'Dim i As Long
 
 'Source for empty code: https://stackoverflow.com/questions/10811121/detect-if-range-is-empty
-If IsEmpty(Range("A:A")) = False Then
-    For i = 2 To 80000
-        ticker = Cells(i, 1)
-        Cells(i, 11) = ticker
-    Next i
-End If
+
+'    For i = 2 To lastrow
+'        ticker = Cells(i, 1)
+'        Cells(i, 11) = ticker
+'    Next i
+
 
 'Output yearly change (sort by date and subtract ending date from beginning date)
-Dim openrate As Double
-Dim closerate As Double
+'Dim openrate As Double
+'Dim closerate As Double
 
-openrate = Cells(2, 2).Value
+'openrate = Cells(2, 2).Value
 
 
 
