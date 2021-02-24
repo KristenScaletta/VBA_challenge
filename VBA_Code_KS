@@ -32,9 +32,8 @@ Sub stockdata()
     'Set the value of rowplace for the summary sheet.
     rowplace = 2
     
-    'Hold initial open and close rates (close is probably not needed--just to be safe
+    'Hold initial open rate
     openrate = Cells(2, 3).Value
-    'closerate = Cells(2, 6).Value
 
     For row = 2 To lastrow
 
@@ -90,4 +89,3 @@ Sub Cellcolor()
     Next row
     
 End Sub
-
