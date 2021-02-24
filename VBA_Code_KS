@@ -1,6 +1,6 @@
 Sub newsummarysheet()
     'Add a new sheet with summary header information at the beginning of the workbook (source: https://www.automateexcel.com/vba/add-and-name-worksheets)
-    Sheets.Add(Before:=Sheets("A")).Name = "Summary"
+    Sheets.Add(Before:=Sheets(1)).Name = "Summary"
     Cells(1, 1).Value = "Ticker"
     Cells(1, 2).Value = "Yearly Change"
     Cells(1, 3).Value = "Percent Change"
