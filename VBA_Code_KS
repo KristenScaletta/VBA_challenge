@@ -1,4 +1,4 @@
- Sub newsummarysheet()
+Sub newsummarysheet()
     'Add a new sheet with summary header information at the beginning of the workbook (source: https://www.automateexcel.com/vba/add-and-name-worksheets)
     Sheets.Add(Before:=Sheets(1)).Name = "Summary"
     Cells(1, 1).Value = "Ticker"
@@ -46,9 +46,14 @@ Sub stockdata()
             ticker = Cells(row, 1).Value
             Worksheets("Summary").Cells(rowplace, 1).Value = ticker
                     
-           'Add yearly change and percent change to summary page. Note--percent change isn't working and I'm not sure why. Assistance is apprecaited!
+           'Add yearly change and percent change to summary page.
             closerate = Cells(row, 6).Value
-            percentchange = Round((closerate - openrate) / closerate, 1)
+            
+            If openrate <> 0 Then
+                percentchange = (closerate - openrate) / openrate
+            Else
+                percentchange = 0
+            End If
             Worksheets("Summary").Cells(rowplace, 2).Value = closerate - openrate
             Worksheets("Summary").Cells(rowplace, 3).Value = percentchange
             'Source for percentage format:https://www.teachexcel.com/free-excel-macros/m-72,Format-Cells-as-a-Percentage-in-Excel-Number-Formatting.html
@@ -77,6 +82,7 @@ Sub Cellcolor()
     Dim lastrow As Long
     
     lastrow = Cells(Rows.Count, 1).End(xlUp).row
+    
     
     'Sets color of cells in yearly change summary column to be red if negative and green if not
     For row = 2 To lastrow
