@@ -48,7 +48,7 @@ Sub stockdata()
                     
            'Add yearly change and percent change to summary page. Note--percent change isn't working and I'm not sure why. Assistance is apprecaited!
             closerate = Cells(row, 6).Value
-            percentchange = CDbl((closerate - openrate) / closerate)
+            percentchange = Round((closerate - openrate) / closerate, 1)
             Worksheets("Summary").Cells(rowplace, 2).Value = closerate - openrate
             Worksheets("Summary").Cells(rowplace, 3).Value = percentchange
             'Source for percentage format:https://www.teachexcel.com/free-excel-macros/m-72,Format-Cells-as-a-Percentage-in-Excel-Number-Formatting.html
